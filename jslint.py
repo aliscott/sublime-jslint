@@ -175,18 +175,16 @@ class JsLintEventListener(sublime_plugin.EventListener):
 
     # extract line from jslint result.
     if (s.get('use_node_jslint', False)):
-      pattern_position = "\\/\\/ Line (\d+), Pos (\d+)$"
+      pattern_position = "\((\d+)\)"
       text = view.substr(region)
       text = re.findall(pattern_position, text)
       if len(text) > 0:
-        line = int(text[0][0])
-        col = int(text[0][1])
+        line = int(text[0])
     else:
       text = view.substr(region).split(':')
       if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
           return
       line = int(text[2])
-      col = int(text[3])
 
     # hightligh view line.
     view.add_regions(RESULT_VIEW_NAME, [region], "comment")
